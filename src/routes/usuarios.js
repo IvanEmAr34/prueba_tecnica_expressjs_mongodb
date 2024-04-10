@@ -1,5 +1,6 @@
 const express = require("express");
 const userService = require("../services/userService");
+const { ERROR } = require("../constants/request");
 const ruta = express.Router();
 
 ruta.get("/", async (req, res) => {
@@ -26,14 +27,13 @@ ruta.post("/", (req, res) => {
     });
 });
 
-ruta.put("/:userId", (req, res) => {
+ruta.put("/:userId", async (req, res) => {
   const userId = req.params["userId"];
-  const user = userService.updateUser(userId, req.body);
-  if (!user) {
-    res.status(400).send("invalid user");
-  } else {
-    res.json(user);
+  const response = await userService.updateUser(userId, req.body);
+  if (response.type === ERROR) {
+    res.status(400).send(response.message);
   }
+  res.json(response.content);
 });
 
 module.exports = ruta;
