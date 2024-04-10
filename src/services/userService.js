@@ -1,7 +1,11 @@
 const { ERROR, SUCCESS } = require("../constants/request");
 const User = require("../models/user_model");
 
-const validateUserInfo = ({ _id, ...userInfo }) => {
+const validateUserInfo = (userInfoRecibed) => {
+  if (!userInfoRecibed) {
+    return false;
+  }
+  const { _id, ...userInfo } = userInfoRecibed;
   let isValidForm = !Object.keys(userInfo).some((userInfoKey) => {
     let isInvalid =
       userInfoKey !== "_id" &&
@@ -20,13 +24,14 @@ const getUserInfoFromBody = (body) => {
   if (Object.keys(body).length === 0) {
     return null;
   }
-  const { name, userName, password, email, roles } = body;
+  const { name, userName, password, confirmPassword, email, roles } = body;
   return {
+    roles,
     name,
     userName,
     password,
+    confirmPassword,
     email,
-    roles,
   };
 };
 

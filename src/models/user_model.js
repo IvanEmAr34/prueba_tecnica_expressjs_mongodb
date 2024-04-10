@@ -1,4 +1,4 @@
-const mongoServer = process.env.MONGO_SERVER;
+const mongoServer = process.env.MONGO_SERVER ?? "";
 const mongoose = require("mongoose");
 mongoose.connect(mongoServer);
 const userSchema = new mongoose.Schema({
